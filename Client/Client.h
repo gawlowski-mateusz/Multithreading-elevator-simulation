@@ -13,9 +13,10 @@ public:
     int speed;
     int client_id;
     int floor_destination;
-    bool isInElevator;
-    bool threadRunning;
     int color{};
+    bool isInElevator;
+    bool isInQueueToElevator;
+    bool threadRunning;
     char c{};
     thread thread_id;
 
@@ -23,17 +24,21 @@ public:
 
     ~Client();
 
+    [[nodiscard]] int getFloorDestination() const;
+
+    [[nodiscard]] int getSpeed() const;
+
+    [[nodiscard]] int getID() const;
+
+    [[nodiscard]] int getColor() const;
+
+    [[nodiscard]] char getClientSymbol() const;
+
     void moveClient();
 
     void goToQueue();
 
     void printClient() const;
-
-    int getFloorDestination() const;
-
-    int getSpeed() const;
-
-    int getID() const;
 
     void setRandomChar();
 
@@ -42,8 +47,6 @@ public:
     void correctOutOfElevatorPosition();
 
     void setRandomColor();
-
-    int getColor() const;
 };
 
 

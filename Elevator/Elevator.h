@@ -13,28 +13,28 @@ public:
     int x_vector_move, y_vector_move;
     int clientInsideIndex = -1;
     int capacity;
-
     std::vector<int> clients_inside_elevator_id;
+    // bool isOnFloor0;
 
     Elevator(int, int);
 
     ~Elevator();
 
+    [[nodiscard]] int getFloor() const;
+
+    [[nodiscard]] int getCapacity() const;
+
     void moveElevator();
 
     void printElevator() const;
 
-    void setFlor();
-
-    [[nodiscard]] int getFloor() const;
-
-    [[nodiscard]] int getCapacity() const;
+    void setFloor();
 
     void printFloor() const;
 
     void releaseClient();
 
-    bool isClientNerbyElevator(const Client *) const;
+    [[nodiscard]] bool canClientEnterElevator() const;
 };
 
 

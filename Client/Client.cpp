@@ -10,7 +10,8 @@ mutex floor_2_client_1, floor_2_client_2, floor_2_client_3, floor_2_client_4, fl
 mutex floor_3_client_1, floor_3_client_2, floor_3_client_3, floor_3_client_4, floor_3_client_5;
 mutex floor_4_client_1, floor_4_client_2, floor_4_client_3, floor_4_client_4, floor_4_client_5;
 
-Client::Client(const int floor_destination, const int speed, const int x_initialise_position, const int y_initialise_position, const int client_id) {
+Client::Client(const int floor_destination, const int speed, const int x_initialise_position,
+               const int y_initialise_position, const int client_id) {
     this->speed = speed;
     this->client_id = client_id;
     this->floor_destination = floor_destination;
@@ -26,6 +27,7 @@ Client::Client(const int floor_destination, const int speed, const int x_initial
 
     threadRunning = true;
     isInElevator = false;
+    isInQueueToElevator = false;
 
     setRandomChar();
     setRandomColor();
@@ -62,13 +64,9 @@ void Client::correctOutOfElevatorPosition() {
 }
 
 void Client::moveClient() {
-    if (x_position == (x_window_size / 2) - 6) {
-        x_vector_move = -1;
+    if (x_position == (x_window_size / 2) - 7) {
+        x_vector_move = 0;
         y_vector_move = 0;
-    }
-
-    if (x_position == 0) {
-        x_vector_move = 1;
     }
 
     if (x_position == x_window_size - 6) {
@@ -110,7 +108,7 @@ void Client::goToQueue() {
         sleep(3);
         floor_1_client_1.unlock();
         c = ' ';
-        x_position++;
+        y_position++;
     } else if (floor_destination == 2) {
         // position 5
         floor_2_client_5.lock();
@@ -138,7 +136,7 @@ void Client::goToQueue() {
         sleep(3);
         floor_2_client_1.unlock();
         c = ' ';
-        x_position++;
+        y_position++;
     } else if (floor_destination == 3) {
         // position 5
         floor_3_client_5.lock();
@@ -166,7 +164,7 @@ void Client::goToQueue() {
         sleep(3);
         floor_3_client_1.unlock();
         c = ' ';
-        x_position++;
+        y_position++;
     } else if (floor_destination == 4) {
         // position 5
         floor_4_client_5.lock();
@@ -194,7 +192,7 @@ void Client::goToQueue() {
         sleep(3);
         floor_4_client_1.unlock();
         c = ' ';
-        x_position++;
+        y_position++;
     }
 }
 
@@ -214,6 +212,10 @@ int Client::getSpeed() const {
 
 int Client::getID() const {
     return client_id;
+}
+
+char Client::getClientSymbol() const {
+    return c;
 }
 
 void Client::setRandomColor() {

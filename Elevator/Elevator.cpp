@@ -24,7 +24,7 @@ void Elevator::moveElevator() {
     x_position += x_vector_move;
     y_position += y_vector_move;
 
-    setFlor();
+    setFloor();
 
     if (y_position == 1 || y_position == (y_window_size * 0.75) - 1 || y_position == (y_window_size * 0.5) - 1 || y_position == (y_window_size * 0.25) - 1 || y_position == y_window_size - 2) {
     }
@@ -39,7 +39,7 @@ void Elevator::printElevator() const {
     printw("[     ]");
 }
 
-void Elevator::setFlor() {
+void Elevator::setFloor() {
     if (y_position == 1) {
         floor = 0;
     } else if (y_position == (y_window_size * 0.25) - 1) {
@@ -64,14 +64,13 @@ int Elevator::getCapacity() const {
 }
 
 void Elevator::printFloor() const {
-    mvprintw(y_window_size - 1, 1, "%.3d", floor);
+    mvprintw(y_window_size - 2, 1, "%.3d", floor);
 }
 
 void Elevator::releaseClient() {
     this->capacity += 1;
 }
 
-bool Elevator::isClientNerbyElevator(const Client *client) const {
-    return (this->floor == 0) &&
-           (client->x_position >= this->x_position && client->x_position <= this->x_position + 10);
+bool Elevator::canClientEnterElevator() const {
+    return (this->floor == 0) && (this->capacity >= 1);
 }
