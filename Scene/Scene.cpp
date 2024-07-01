@@ -20,10 +20,10 @@ void Scene::initialiseScene() {
 
 void Scene::printScene() const {
     mvprintw(0, width - 8, "%.8s", "floor_0");
-    mvprintw(height * 0.25 - 1, width - 8, "%.8s", "floor_1");
-    mvprintw(height * 0.50 - 1, width - 8, "%.8s", "floor_2");
-    mvprintw(height * 0.75 - 1, width - 8, "%.8s", "floor_3");
-    mvprintw(height - 2, width - 8, "%.8s", "floor_4");
+    mvprintw(height * 0.25 - 2, width - 8, "%.8s", "floor_1");
+    mvprintw(height * 0.50 - 2, width - 8, "%.8s", "floor_2");
+    mvprintw(height * 0.75 - 2, width - 8, "%.8s", "floor_3");
+    mvprintw(height - 3, width - 8, "%.8s", "floor_4");
 }
 
 int
@@ -34,5 +34,4 @@ Scene::getHeight() const {
 int Scene::getWidth() const {
     return width;
 }
-
 

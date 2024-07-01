@@ -9,7 +9,7 @@ class Elevator {
 public:
     int x_position{}, y_position{};
     int floor;
-    int windowPosX, windowPosY;
+    int x_window_size, y_window_size;
     int x_vector_move, y_vector_move;
     int clientInsideIndex = -1;
     int capacity;
@@ -31,8 +31,6 @@ public:
     [[nodiscard]] int getCapacity() const;
 
     void printFloor() const;
-
-    static void pauseElevator();
 
     void releaseClient();
 

@@ -1,16 +1,22 @@
 #include "Client.h"
 #include <cstdlib>
+#include <mutex>
 #include <ncurses.h>
 #include <unistd.h>
 using namespace std;
+
+mutex floor_1_client_1, floor_1_client_2, floor_1_client_3, floor_1_client_4, floor_1_client_5;
+mutex floor_2_client_1, floor_2_client_2, floor_2_client_3, floor_2_client_4, floor_2_client_5;
+mutex floor_3_client_1, floor_3_client_2, floor_3_client_3, floor_3_client_4, floor_3_client_5;
+mutex floor_4_client_1, floor_4_client_2, floor_4_client_3, floor_4_client_4, floor_4_client_5;
 
 Client::Client(const int floor_destination, const int speed, const int x_initialise_position, const int y_initialise_position, const int client_id) {
     this->speed = speed;
     this->client_id = client_id;
     this->floor_destination = floor_destination;
 
-    windowPosX = x_initialise_position;
-    windowPosY = y_initialise_position;
+    x_window_size = x_initialise_position;
+    y_window_size = y_initialise_position;
 
     x_vector_move = 1;
     y_vector_move = 0;
@@ -35,14 +41,28 @@ void Client::setRandomChar() {
 }
 
 void Client::getOutOfElevator() {
-    this->x_vector_move = -1;
-    this->y_vector_move = 0;
+    correctOutOfElevatorPosition();
     this->isInElevator = false;
     this->moveClient();
 }
 
+void Client::correctOutOfElevatorPosition() {
+    if (this->getFloorDestination() == 1) {
+        this->y_position = y_window_size * 0.25 - 1;
+    } else if (this->getFloorDestination() == 2) {
+        this->y_position = y_window_size * 0.50 - 1;
+    } else if (this->getFloorDestination() == 3) {
+        this->y_position = y_window_size * 0.75 - 1;
+    } else {
+        this->y_position = y_window_size - 2;
+    }
+
+    this->x_vector_move = -1;
+    this->y_vector_move = 0;
+}
+
 void Client::moveClient() {
-    if (x_position == (windowPosX / 2) - 6) {
+    if (x_position == (x_window_size / 2) - 6) {
         x_vector_move = -1;
         y_vector_move = 0;
     }
@@ -51,20 +71,131 @@ void Client::moveClient() {
         x_vector_move = 1;
     }
 
-    if (x_position >= (windowPosX / 2) + 7) {
-        x_vector_move = 1;
-        y_vector_move = 0;
-    }
-
-    if (x_position == windowPosX - 1) {
-        x_vector_move = 0;
-        y_vector_move = 0;
-        sleep(3);
-        c = ' ';
+    if (x_position == x_window_size - 6) {
+        goToQueue();
     }
 
     x_position += x_vector_move;
     y_position += y_vector_move;
+}
+
+void Client::goToQueue() {
+    x_vector_move = 0;
+    y_vector_move = 0;
+
+    if (floor_destination == 1) {
+        // position 5
+        floor_1_client_5.lock();
+        x_position++;
+
+        // position 4
+        floor_1_client_4.lock();
+        floor_1_client_5.unlock();
+        x_position++;
+
+        // position 3
+        floor_1_client_3.lock();
+        floor_1_client_4.unlock();
+        x_position++;
+
+        // position 2
+        floor_1_client_2.lock();
+        floor_1_client_3.unlock();
+        x_position++;
+
+        // position 1 - finish
+        floor_1_client_1.lock();
+        floor_1_client_2.unlock();
+        x_position++;
+        sleep(3);
+        floor_1_client_1.unlock();
+        c = ' ';
+        x_position++;
+    } else if (floor_destination == 2) {
+        // position 5
+        floor_2_client_5.lock();
+        x_position++;
+
+        // position 4
+        floor_2_client_4.lock();
+        floor_2_client_5.unlock();
+        x_position++;
+
+        // position 3
+        floor_2_client_3.lock();
+        floor_2_client_4.unlock();
+        x_position++;
+
+        // position 2
+        floor_2_client_2.lock();
+        floor_2_client_3.unlock();
+        x_position++;
+
+        // position 1 - finish
+        floor_2_client_1.lock();
+        floor_2_client_2.unlock();
+        x_position++;
+        sleep(3);
+        floor_2_client_1.unlock();
+        c = ' ';
+        x_position++;
+    } else if (floor_destination == 3) {
+        // position 5
+        floor_3_client_5.lock();
+        x_position++;
+
+        // position 4
+        floor_3_client_4.lock();
+        floor_3_client_5.unlock();
+        x_position++;
+
+        // position 3
+        floor_3_client_3.lock();
+        floor_3_client_4.unlock();
+        x_position++;
+
+        // position 2
+        floor_3_client_2.lock();
+        floor_3_client_3.unlock();
+        x_position++;
+
+        // position 1 - finish
+        floor_3_client_1.lock();
+        floor_3_client_2.unlock();
+        x_position++;
+        sleep(3);
+        floor_3_client_1.unlock();
+        c = ' ';
+        x_position++;
+    } else if (floor_destination == 4) {
+        // position 5
+        floor_4_client_5.lock();
+        x_position++;
+
+        // position 4
+        floor_4_client_4.lock();
+        floor_4_client_5.unlock();
+        x_position++;
+
+        // position 3
+        floor_4_client_3.lock();
+        floor_4_client_4.unlock();
+        x_position++;
+
+        // position 2
+        floor_4_client_2.lock();
+        floor_4_client_3.unlock();
+        x_position++;
+
+        // position 1 - finish
+        floor_4_client_1.lock();
+        floor_4_client_2.unlock();
+        x_position++;
+        sleep(3);
+        floor_4_client_1.unlock();
+        c = ' ';
+        x_position++;
+    }
 }
 
 

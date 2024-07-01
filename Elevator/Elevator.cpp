@@ -5,11 +5,11 @@
 #include "../Client/Client.h"
 
 Elevator::Elevator(const int x_initialise_position, const int y_initialise_position) {
-    windowPosX = x_initialise_position;
-    windowPosY = y_initialise_position;
+    x_window_size = x_initialise_position;
+    y_window_size = y_initialise_position;
 
-    x_position = windowPosX / 2 - 6;
-    y_position = windowPosY;
+    x_position = x_window_size / 2 - 6;
+    y_position = y_window_size;
 
     x_vector_move = 0;
     y_vector_move = 1;
@@ -26,12 +26,10 @@ void Elevator::moveElevator() {
 
     setFlor();
 
-    if (y_position == 1 || y_position == windowPosY * 0.75 || y_position == windowPosY * 0.5 || y_position == windowPosY
-        * 0.25 || y_position == windowPosY - 1) {
-        // pauseElevator();
+    if (y_position == 1 || y_position == (y_window_size * 0.75) - 1 || y_position == (y_window_size * 0.5) - 1 || y_position == (y_window_size * 0.25) - 1 || y_position == y_window_size - 2) {
     }
 
-    if (y_position >= windowPosY) {
+    if (y_position >= y_window_size) {
         y_position = 0;
     }
 }
@@ -44,13 +42,13 @@ void Elevator::printElevator() const {
 void Elevator::setFlor() {
     if (y_position == 1) {
         floor = 0;
-    } else if (y_position == windowPosY * 0.25) {
+    } else if (y_position == (y_window_size * 0.25) - 1) {
         floor = 1;
-    } else if (y_position == windowPosY * 0.50) {
+    } else if (y_position == (y_window_size * 0.50) - 1) {
         floor = 2;
-    } else if (y_position == windowPosY * 0.75) {
+    } else if (y_position == (y_window_size * 0.75) - 1) {
         floor = 3;
-    } else if (y_position == windowPosY - 1) {
+    } else if (y_position == y_window_size - 2) {
         floor = 4;
     } else {
         floor = -1;
@@ -66,11 +64,7 @@ int Elevator::getCapacity() const {
 }
 
 void Elevator::printFloor() const {
-    mvprintw(windowPosY - 1, 1, "%.3d", floor);
-}
-
-void Elevator::pauseElevator() {
-    sleep(3);
+    mvprintw(y_window_size - 1, 1, "%.3d", floor);
 }
 
 void Elevator::releaseClient() {

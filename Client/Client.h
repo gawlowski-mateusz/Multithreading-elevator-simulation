@@ -8,7 +8,7 @@ using namespace std;
 class Client {
 public:
     int x_position, y_position;
-    int windowPosX, windowPosY;
+    int x_window_size, y_window_size;
     int x_vector_move, y_vector_move;
     int speed;
     int client_id;
@@ -25,6 +25,8 @@ public:
 
     void moveClient();
 
+    void goToQueue();
+
     void printClient() const;
 
     int getFloorDestination() const;
@@ -35,13 +37,9 @@ public:
 
     void setRandomChar();
 
-    void stopThread();
-
-    bool isThreadRunning();
-
-    thread runThread();
-
     void getOutOfElevator();
+
+    void correctOutOfElevatorPosition();
 
     void setRandomColor();
 

@@ -31,6 +31,7 @@ void moveClient(Client *client) {
         if (client->isInElevator) {
             if (client->floor_destination == elevator->getFloor()) {
                 client->getOutOfElevator();
+                client->x_position += 1;
                 client->x_vector_move = 1;
                 elevator->releaseClient();
             }
@@ -42,11 +43,11 @@ void moveClient(Client *client) {
                 elevator->capacity -= 1;
 
                 client->x_position = elevator->x_position + (elevator->getCapacity()) + 1;
-                client->y_position = elevator->y_position;
+                client->y_position = elevator->y_position ;
                 client->x_vector_move = 0;
                 client->y_vector_move = elevator->y_vector_move;
 
-                if (elevator->getCapacity() == 0) {
+                if (elevator->getCapacity() < 0) {
                     elevator->releaseClient();
                     client->getOutOfElevator();
                     client->y_position = 1;
@@ -75,7 +76,7 @@ void makeNewClient() {
     const int y_position = scene->getHeight();
 
     while (runFlag) {
-        const int floor_destination = rand() % 3 + 1;
+        const int floor_destination = rand() % 4 + 1;
         const int speed = rand() % 5 + 1;
         const int time = rand() % 10 + 1;
 
@@ -95,14 +96,15 @@ void windowRefresh() {
         clear();
 
         elevator->printElevator();
-        elevator->printFloor();
-        scene->printScene();
 
         for (int i = 0; i < clients.size(); i++) {
             attron(COLOR_PAIR(clients[i]->getColor()));
             clients[i]->printClient();
             attroff(COLOR_PAIR(clients[i]->getColor()));
         }
+
+        elevator->printFloor();
+        scene->printScene();
 
         refresh();
         usleep(2000);
